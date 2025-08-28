@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bot Controller</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
+    h1 { color: #333; }
+    button { margin: 5px; padding: 10px 15px; cursor: pointer; }
+    .log-container {
+      margin-top: 20px;
+    }
+    .log-box {
+      width: 100%; height: 250px;
+      border: 1px solid #333;
+      margin-top: 10px; padding: 10px;
+      overflow-y: auto;
+      background: #111;
+      color: #0f0;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bot Controller</h1>
+
+  <button onclick="startMonitor()">▶ Start monitor.py</button>
+  <button onclick="stopMonitor()">⏹ Stop monitor.py</button>
+  <button onclick="startBotMonitor()">▶ Start bot_monitor.py</button>
+  <button onclick="stopBotMonitor()">⏹ Stop bot_monitor.py</button>
+
+  <div class="log-container">
+    <h2>alerts.log (monitor.py)</h2>
+    <div id="alertsLog" class="log-box"></div>
+  </div>
+
+  <div class="log-container">
+    <h2>bot_alerts.log (bot_monitor.py)</h2>
+    <div id="botAlertsLog" class="log-box"></div>
+  </div>
+
+  <script>
+    // Connect to backend socket.io server
+    const socket = io();
+
+    // Append new log lines for alerts.log
+    socket.on("alertsLogUpdate", (line) => {
+      const logBox = document.getElementById("alertsLog");
+      logBox.textContent += line;
+      logBox.scrollTop = logBox.scrollHeight;
+    });
+
+    // Append new log lines for bot_alerts.log
+    socket.on("botAlertsLogUpdate", (line) => {
+      const logBox = document.getElementById("botAlertsLog");
+      logBox.textContent += line;
+      logBox.scrollTop = logBox.scrollHeight;
+    });
+
+    // API calls for buttons
+    function startMonitor() {
+      fetch("/start-monitor");
+    }
+    function stopMonitor() {
+      fetch("/stop-monitor");
+    }
+    function startBotMonitor() {
+      fetch("/start-bot-monitor");
+    }
+    function stopBotMonitor() {
+      fetch("/stop-bot-monitor");
+    }
+  </script>
+</body>
+</html>

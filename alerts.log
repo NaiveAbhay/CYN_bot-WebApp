@@ -35,3 +35,5 @@ task: <Task cancelling name='Task-9' coro=<Connection._recv_loop() running at /L
 [ALERT] Group: Hack1(11) | Trigger: E | Message: Emoji | Total Flags in this Group: 1
 [ALERT] Group: Crypto With Khan | Trigger: E | Message: Ye Eklauta Chart Hai Jiske Dump Hone Pe Sab Khus Hote Hain 😂 | Total Flags in this Group: 1
 [ALERT] Group: Jmi | Trigger: e | Message: Payment kaise kre iski? | Total Flags in this Group: 1
+[ALERT] Group: Hack1(11) | Trigger: e | Message: Cocaine | Total Flags in this Group: 1
+[ALERT] Group: Hack1(11) | Trigger: e | Message: Cocaine | Total Flags in this Group: 2
