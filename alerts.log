@@ -34,3 +34,4 @@ task: <Task cancelling name='Task-9' coro=<Connection._recv_loop() running at /L
 2025-08-28 19:27:05,831 - INFO - Not disconnecting (already have no connection)
 [ALERT] Group: Hack1(11) | Trigger: E | Message: Emoji | Total Flags in this Group: 1
 [ALERT] Group: Crypto With Khan | Trigger: E | Message: Ye Eklauta Chart Hai Jiske Dump Hone Pe Sab Khus Hote Hain 😂 | Total Flags in this Group: 1
+[ALERT] Group: Jmi | Trigger: e | Message: Payment kaise kre iski? | Total Flags in this Group: 1
