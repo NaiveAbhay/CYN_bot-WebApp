@@ -4,6 +4,7 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 const fs = require("fs");
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
@@ -15,9 +16,13 @@ let processes = {
   monitor: null,
   bot_monitor: null,
 };
-
+app.use(cors({
+  origin: 'http://localhost:3000' // Replace with your frontend URL
+}));
 // Serve frontend (index.html will go inside /public)
 app.use(express.static(path.join(__dirname, "..", "public")));
+
+
 
 // Function to run python scripts
 function runPythonScript(name, scriptFile) {
