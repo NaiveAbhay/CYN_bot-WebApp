@@ -8,17 +8,25 @@ const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
-const PORT = 3000;
+app.use(cors({
+  origin: 'http://localhost:3000' // Replace with your frontend URL
+}));
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000", // Replace with your frontend's URL
+    methods: ["GET", "POST"],
+  }
+});
+
+const PORT = 3001;
 
 let processes = {
   monitor: null,
   bot_monitor: null,
 };
-app.use(cors({
-  origin: 'http://localhost:3000' // Replace with your frontend URL
-}));
+
 // Serve frontend (index.html will go inside /public)
 app.use(express.static(path.join(__dirname, "..", "public")));
 
