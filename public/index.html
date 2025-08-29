@@ -2,12 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bot Controller</title>
   <script src="/socket.io/socket.io.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      background: #fafafa; 
+      color: #333;
+    }
     h1 { color: #333; }
-    button { margin: 5px; padding: 10px 15px; cursor: pointer; }
+    h2 { margin-top: 30px; }
+    button { 
+      margin: 5px; 
+      padding: 10px 15px; 
+      cursor: pointer; 
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #e0e0e0;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #d0d0d0;
+    }
     .log-container {
       margin-top: 20px;
     }
@@ -22,15 +40,36 @@
       font-size: 14px;
       white-space: pre-wrap;
     }
+    .input-group {
+      margin-top: 20px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 90%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <h1>Bot Controller</h1>
 
-  <button onclick="startMonitor()">▶ Start monitor.py</button>
-  <button onclick="stopMonitor()">⏹ Stop monitor.py</button>
-  <button onclick="startBotMonitor()">▶ Start bot_monitor.py</button>
-  <button onclick="stopBotMonitor()">⏹ Stop bot_monitor.py</button>
+  <div>
+    <button onclick="startMonitor()">▶ Start monitor.py</button>
+    <button onclick="stopMonitor()">⏹ Stop monitor.py</button>
+  </div>
+
+  <div class="input-group">
+    <h2>Bot Monitor Control</h2>
+    <label for="botUsernames">Enter usernames (comma-separated):</label>
+    <input type="text" id="botUsernames" placeholder="@username1, @username2">
+    <button onclick="startBotMonitorDynamic()">▶ Start bot_monitor.py (Dynamic)</button>
+    <button onclick="stopBotMonitor()">⏹ Stop bot_monitor.py</button>
+  </div>
 
   <div class="log-container">
     <h2>alerts.log (monitor.py)</h2>
@@ -67,11 +106,36 @@
     function stopMonitor() {
       fetch("/stop-monitor");
     }
-    function startBotMonitor() {
-      fetch("/start-bot-monitor");
-    }
     function stopBotMonitor() {
       fetch("/stop-bot-monitor");
+    }
+
+    // NEW FUNCTION for dynamic bot monitor
+    function startBotMonitorDynamic() {
+      const usersInput = document.getElementById("botUsernames").value;
+      const users = usersInput.split(',').map(user => user.trim()).filter(user => user !== '');
+
+      if (users.length === 0) {
+        alert("Please enter at least one username.");
+        return;
+      }
+
+      fetch("/start-bot-monitor-dynamic", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ users: users }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(`Error: ${data.error}`);
+        } else {
+          console.log(data.success);
+        }
+      })
+      .catch((error) => console.error('Error:', error));
     }
   </script>
 </body>

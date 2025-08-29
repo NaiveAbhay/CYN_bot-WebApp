@@ -4,6 +4,7 @@ import cv2
 import asyncio
 import logging
 import random
+import sys
 from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.errors import (
@@ -38,6 +39,7 @@ def load_list(filename):
 
 SLANG = load_list("slang.txt")
 EMOJIS = load_list("emoji.txt")
+MONITORED_BOT_IDS = set()
 
 # ---------------- Alert System ---------------- #
 def log_alert(bot_username, msg_type, triggers, content):
@@ -54,7 +56,7 @@ def log_failed(bot_username, reason):
 async def analyze_text(bot_username, text):
     triggers = []
     for word in SLANG + EMOJIS:
-        if word in text:
+        if word in text.lower():
             triggers.append(word)
 
     if re.search(BTC_REGEX, text): triggers.append("BTC")
@@ -99,20 +101,14 @@ async def interact_with_bot(username: str):
             username = username.replace("https://t.me/", "@")
 
         entity = await client.get_entity(username)
+        MONITORED_BOT_IDS.add(entity.id)
         log.info(f"🤖 Interacting with {username}")
 
         for cmd in START_COMMANDS:
             await client.send_message(entity, cmd)
             log.info(f"📩 Sent {cmd} to {username}")
             await asyncio.sleep(random.uniform(2, 4))
-
-        @client.on(events.NewMessage(from_users=entity.id))
-        async def handler(event):
-            if event.message.message:
-                await analyze_text(username, event.message.message)
-            if event.message.media:
-                await analyze_media(username, event)
-
+    
     except UsernameInvalidError:
         log.error(f"❌ Invalid username: {username}")
         log_failed(username, "Invalid username")
@@ -134,22 +130,35 @@ async def interact_with_bot(username: str):
         log.error(f"❌ Unexpected error with {username}: {repr(e)}")
         log_failed(username, repr(e))
 
+# ---------------- Global Message Handler ---------------- #
+@client.on(events.NewMessage)
+async def handler(event):
+    sender = await event.get_sender()
+    if sender and sender.id in MONITORED_BOT_IDS:
+        bot_username = getattr(sender, 'username', 'Unknown')
+        log.info(f"Received message from @{bot_username}")
+        if event.message.message:
+            await analyze_text(bot_username, event.message.message)
+        if event.message.media:
+            await analyze_media(bot_username, event)
+
 # ---------------- Main ---------------- #
 async def main():
     await client.start()
     log.info("🚀 Bot monitor started...")
 
-    if not os.path.exists("bots.txt"):
-        log.error("⚠️ bots.txt not found!")
+    bots_to_monitor = sys.argv[1:]
+
+    if not bots_to_monitor:
+        log.error("⚠️ No bots provided. Please run the script with bot usernames as arguments.")
+        await client.disconnect()
         return
 
-    with open("bots.txt", "r", encoding="utf-8") as f:
-        bots = [line.strip() for line in f if line.strip()]
-
-    for b in bots:
+    for b in bots_to_monitor:
         await interact_with_bot(b)
         await asyncio.sleep(random.uniform(5, 10))  # slow down to avoid ban
 
+    log.info("Finished sending initial commands. Waiting for bot responses...")
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
