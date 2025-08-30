@@ -135,7 +135,6 @@
 // server.listen(PORT, () => {
 //   console.log(`🚀 Server running on http://localhost:${PORT}`);
 // });
-
 const express = require("express");
 const { spawn } = require("child_process");
 const path = require("path");
@@ -176,8 +175,8 @@ let processes = {
   bot_monitor: null,
 };
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "..", "public")));
+// Serve frontend (from /public in root)
+app.use(express.static(path.join(__dirname, "public")));
 
 // Function to run python scripts
 function runPythonScript(name, scriptFile, args = []) {
@@ -185,9 +184,9 @@ function runPythonScript(name, scriptFile, args = []) {
     return { error: `${name} is already running.` };
   }
 
-  const scriptPath = path.join(__dirname, "..", scriptFile);
+  const scriptPath = path.join(__dirname, scriptFile);
   const child = spawn("python", [scriptPath, ...args], {
-    cwd: path.join(__dirname, ".."),
+    cwd: __dirname,
   });
 
   processes[name] = child;
@@ -263,8 +262,9 @@ function watchLogFile(filePath, eventName) {
   });
 }
 
-watchLogFile(path.join(__dirname, "..", "alerts.log"), "alertsLogUpdate");
-watchLogFile(path.join(__dirname, "..", "bot_alerts.log"), "botAlertsLogUpdate");
+// Updated log watchers (from root)
+watchLogFile(path.join(__dirname, "alerts.log"), "alertsLogUpdate");
+watchLogFile(path.join(__dirname, "bot_alerts.log"), "botAlertsLogUpdate");
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

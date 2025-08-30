@@ -14,3 +14,20 @@ Use /buy followed by the drug number to purchase.
 /buy - Purchase a drug
 /order - Check your order status
 [BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e'] | Content: Please specify the drug number to buy. Use /menu to see the menu.
+[BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e'] | Content: Welcome to the Drug Bot! Use /help to see available commands.
+[BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e', 'meth'] | Content: Our drug menu:
+
+1. Cocaine - $500
+2. Heroin - $300
+3. Meth - $200
+
+Use /buy followed by the drug number to purchase.
+[BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e', 'k', 'tar'] | Content: Available commands:
+
+/start - Welcome message
+/help - Show this help message
+/menu - Show the drug menu
+/buy - Purchase a drug
+/order - Check your order status
+[BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e'] | Content: Please specify the drug number to buy. Use /menu to see the menu.
+[BOT ALERT] @drugsellertest_bot | Type: text | Triggers: ['e'] | Content: Your order status: In progress. A dealer will contact you soon.
