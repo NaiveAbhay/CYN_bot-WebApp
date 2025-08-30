@@ -149,7 +149,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL =  process.env.FRONTEND_URL;
 const PORT = process.env.PORT || 3001;
 
 app.use(
