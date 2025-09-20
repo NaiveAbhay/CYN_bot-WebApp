@@ -27,8 +27,7 @@ Dabs
 dabs
 Dope
 dope
-E
-e
+
 Ecstasy
 ecstasy
 Ganja
@@ -41,8 +40,8 @@ Herb
 herb
 Ice
 ice
-K
-k
+
+
 Ketamine
 ketamine
 Lean
@@ -89,8 +88,7 @@ Weed
 weed
 White
 white
-X
-x
+
 Xan
 xan
 Xanax

@@ -1,0 +1,50 @@
+# =========================
+# Python files
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.log
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+*.env
+.env.*
+
+# =========================
+# Virtual environments
+# =========================
+venv/
+env/
+.venv/
+.env
+
+# =========================
+# IDE / Editor files
+# =========================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Build / Distribution
+# =========================
+build/
+dist/
+*.egg-info/
+*.egg
+
+# =========================
+# Node / Frontend (if any)
+# ============
